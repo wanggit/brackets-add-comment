@@ -1,3 +1,5 @@
+/*jslint vars: true, plusplus: true, devel: true, nomen: true, indent: 4, maxerr: 50 */
+/*global define, $, brackets, window, MouseEvent */
 define(function(require, exports, module){
     
     var EditorManager = brackets.getModule("editor/EditorManager");
