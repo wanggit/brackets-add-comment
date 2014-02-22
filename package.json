@@ -1,0 +1,24 @@
+{
+  "name": "brackets-add-comment",
+  "version": "0.1.0",
+  "description": "Uppercase, Lowercase, Add Comments",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/wanggit/brackets-add-comment.git"
+  },
+  "keywords": [
+    "Uppercase",
+    "Lowercase",
+    "comments"
+  ],
+  "author": "wanggit",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/wanggit/brackets-add-comment/issues"
+  },
+  "homepage": "https://github.com/wanggit/brackets-add-comment"
+}
