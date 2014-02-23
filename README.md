@@ -1,5 +1,5 @@
 ## Add Comments
-If the cursor is in line of code is **/\*\***,press **Enter**. the comments auto generate
+If the cursor is in line of code is _/**_,press _Enter_. the comments auto generate
 ```javascript
 /**
  * 
