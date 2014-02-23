@@ -1,6 +1,6 @@
 {
   "name": "brackets-add-comment",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Uppercase, Lowercase, Add Comments",
   "main": "main.js",
   "scripts": {
