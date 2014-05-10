@@ -10,7 +10,7 @@ define(function(require, exports, module){
     function handlerEnter(){
         var editor = EditorManager.getFocusedEditor();
         var deferred = new $.Deferred();
-        var line, content, cm, endComments, indentInfo, nextLineInfo;
+        var line, content, cm, endComments, indentInfo, nextLineInfo, from, to;
         var beginRegex = /^\s*\/\*\*\s*$/;
         var regex = /^\s+\*\s*[^\/]*$/;
         var endRegex = /^\s+\*\/\s*$/;
@@ -36,7 +36,11 @@ define(function(require, exports, module){
                     // 添加参数的注释
                     _appendArgsStar(cm, line, indentInfo, nextLineInfo);
                     cm.execCommand("newlineAndIndent");
-                    cm.setLine(line+2+(nextLineInfo ? nextLineInfo.length : 0), indentInfo.indentStr+" */");
+					from = to = {
+						line : line+2+(nextLineInfo ? nextLineInfo.length : 0),
+						ch : indentInfo.indentStr.length
+					};
+					cm.doc.replaceRange(" */", from, to);
                 }
                 // 把光标定位到第line+1行
                 cm.setCursor({
@@ -66,8 +70,12 @@ define(function(require, exports, module){
     function _replaceContent(cm, line, content){
         var regex = /^\s*\/\*\*[*]*\/$/;
         var contentRegex = /^\s*\/\*\*/;
+		var from = to = {
+			line : line,
+			ch : 0
+		};
         if( regex.test(content) ){
-            cm.setLine(line, content.match(contentRegex)[0]);
+			cm.doc.replaceRange(content.match(contentRegex)[0], from, to);
         }
         return cm.getLine(line);
     }
@@ -79,13 +87,17 @@ define(function(require, exports, module){
      * @param {Array} nextLineInfo 光标所在行的下一行函数具有参数个数
      */
     function _appendArgsStar(cm, line, indentInfo, nextLineInfo){
-        var len;
+        var len, from, to;
         line ++;
         if( nextLineInfo ){
             len = nextLineInfo.length;
             for(var i=0;i<len;i++){
+				from = to = {
+					line : line+i+1,
+					ch : indentInfo.indentStr.length
+				};
                 cm.execCommand("newlineAndIndent");
-                cm.setLine(line+i+1, indentInfo.indentStr+" * @param {Type} "+nextLineInfo[i]);
+				cm.doc.replaceRange(" * @param {Type} "+nextLineInfo[i], from, to);
             }
         }
     }
@@ -125,8 +137,12 @@ define(function(require, exports, module){
      * @param {Object} indentInfo 包含缩进空格个数与补充缩进空格的字符串的对象
      */
     function _appendStar(cm, line, indentInfo){
+		var from = to = {
+			line : line + 1,
+			ch : indentInfo.indentStr.length
+		};
         cm.execCommand("newlineAndIndent");
-        cm.setLine(line+1, indentInfo.indentStr+"* ");
+		cm.doc.replaceRange("* ", from, to);
     }
     /**
      * 在没有注释结束标记的情况下添加*
@@ -135,8 +151,12 @@ define(function(require, exports, module){
      * @param {Object} indentInfo 包含缩进空格个数与补充缩进空格的字符串的对象
      */
     function _appendNoEndStar(cm, line, indentInfo){
-        cm.execCommand("newlineAndIndent");
-        cm.setLine(line+1, indentInfo.indentStr+" * ");
+        var from = to = {
+			line : line + 1,
+			ch : indentInfo.indentStr.length
+		};
+		cm.execCommand("newlineAndIndent");
+		cm.doc.replaceRange(" * ", from, to);
     }
     
     /**
